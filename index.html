@@ -1,120 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Biodata</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            margin: 40px; 
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .photo-box {
-            width: 120px;
-            height: 140px;
-            border: 2px solid black;
-            text-align: center;
-            line-height: 140px;
-        }
-        h1, h2 {
-            font-weight: 800;
-        }
-        h2  {
-            border-bottom: 2px solid black;
-            padding-bottom: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-        ul {
-            margin-top: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Class 11 Quiz App</title>
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .quiz-container {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 420px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 10px;
+    }
+
+    .option {
+        display: block;
+        margin: 10px 0;
+        padding: 12px;
+        background: #eee;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .option:hover {
+        background: #ddd;
+    }
+
+    .correct {
+        background: #4CAF50 !important;
+        color: white;
+    }
+
+    .wrong {
+        background: #f44336 !important;
+        color: white;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 12px;
+        width: 100%;
+        border: none;
+        background: #667eea;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    #timer {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #progress {
+        margin-bottom: 10px;
+    }
+</style>
 </head>
+
 <body>
-    <div class="header">
-        <div class="photo-box">Photo</div>
-        <div>
-        <div class="name-block">
-            <h1>Name: Samir Shrestha</h1>
-        </div>
-        
-            
-        
 
-<div class="section">
-    <h2>Details</h2>
-
-    <div class="details-align">
-        <div class="row"><span class="label">Name</span><span class="colon">:</span><span>Samir Shrestha</span></div>
-        <div class="row"><span class="label">Class</span><span class="colon">:</span><span>11</span></div>
-        <div class="row"><span class="label">Contact No</span><span class="colon">:</span><span>9876543210</span></div>
-        <div class="row"><span class="label">Email</span><span class="colon">:</span><span>abc@gmail.com</span></div>
-        <div class="row"><span class="label">Date of Birth</span><span class="colon">:</span><span>2065/06/11 (2008/09/27 AD)</span></div>
-        <div class="row"><span class="label">Address</span><span class="colon">:</span><span>Rampur-5, Palpa</span></div>
-    </div>
+<div class="quiz-container">
+    <div id="progress"></div>
+    <div id="timer">Time: 10</div>
+    <h2 id="question">Loading...</h2>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
 </div>
 
+<script>
+const quiz = [
+    { question: "What does CPU stand for?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Control Processing Unit"], answer: 0 },
+    { question: "Which device is used to input data?", options: ["Monitor", "Keyboard", "Printer", "Speaker"], answer: 1 },
+    { question: "What does RAM stand for?", options: ["Random Access Memory", "Read Access Memory", "Run Access Memory", "Real Application Memory"], answer: 0 },
+    { question: "Which is an output device?", options: ["Mouse", "Keyboard", "Monitor", "Scanner"], answer: 2 },
+    { question: "What is the brain of the computer?", options: ["RAM", "CPU", "Hard Disk", "Motherboard"], answer: 1 },
+    { question: "Which language is used to create web pages?", options: ["HTML", "C++", "Python", "Java"], answer: 0 },
+    { question: "What does ALU stand for?", options: ["Arithmetic Logic Unit", "Application Logic Unit", "Advanced Logic Unit", "Arithmetic Link Unit"], answer: 0 },
+    { question: "Which storage is permanent?", options: ["RAM", "Cache", "ROM", "Register"], answer: 2 },
+    { question: "Which is an example of operating system?", options: ["Windows", "MS Word", "Excel", "PowerPoint"], answer: 0 },
+    { question: "What is the full form of URL?", options: ["Uniform Resource Locator", "Universal Resource Link", "Uniform Reference Link", "Universal Reference Locator"], answer: 0 },
+    { question: "Which device is used to print documents?", options: ["Monitor", "Printer", "Speaker", "Mouse"], answer: 1 },
+    { question: "What is the smallest unit of data?", options: ["Byte", "Bit", "KB", "MB"], answer: 1 },
+    { question: "Which memory is fastest?", options: ["RAM", "ROM", "Cache", "Hard Disk"], answer: 2 },
+    { question: "What does GUI stand for?", options: ["Graphical User Interface", "General User Interface", "Graphical Utility Interface", "General Utility Interface"], answer: 0 },
+    { question: "Which is a programming language?", options: ["HTML", "CSS", "Python", "HTTP"], answer: 2 },
+    { question: "What is the full form of USB?", options: ["Universal Serial Bus", "United System Bus", "Universal System Bus", "Unique Serial Bus"], answer: 0 },
+    { question: "Which part stores data permanently?", options: ["RAM", "Hard Disk", "Cache", "Register"], answer: 1 },
+    { question: "Which device is used to move cursor?", options: ["Keyboard", "Monitor", "Mouse", "Printer"], answer: 2 },
+    { question: "What does LAN stand for?", options: ["Local Area Network", "Large Area Network", "Logical Area Network", "Long Area Network"], answer: 0 },
+    { question: "Which is an input device?", options: ["Scanner", "Printer", "Monitor", "Speaker"], answer: 0 }
+];
 
-    <h2>Skills</h2>
-    <ul>
-        <li>Computer Coding</li>
-        <li>Sports</li>
-        <li>Cooking</li>
-    </ul>
-    <div class="section">
-    <h2>Education</h2>
-    <table>
-        <tr>
-            <th>S.N</th>
-            <th>Level</th>
-            <th>Faculty</th>
-            <th>GPA</th>
-            <th>Remarks</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>SEE</td>
-            <td>Science</td>
-            <td>3.56</td>
-            <td>Pass</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>+2</td>
-            <td>Science</td>
-            <td>3.42</td>
-            <td>Pass</td>
-        </tr>
-    </table>
-    
-    <h2>Hobby</h2>
-    <p>Music, Cooking, Sports</p>
+let current = 0;
+let score = 0;
+let timeLeft = 10;
+let timer;
+let answered = false;
 
-    <h2>Languages</h2>
-    <p>English, Nepali, Hindi</p>
-    <p>English</p>
-    <progress value="90" max="100"></progress>
-    <p>Nepali</p>
-    <progress value="100" max="100"></progress>
-    <p>Hindi</p>
-    <progress value="70" max="100"></progress>
-    <p>Fluent in English (understanding and speaking)</p>
+function loadQuestion() {
+    clearInterval(timer);
+    answered = false;
+    timeLeft = 10;
+
+    let q = quiz[current];
+
+    document.getElementById("question").innerText = q.question;
+    document.getElementById("progress").innerText =
+        `Question ${current + 1} of ${quiz.length}`;
+
+    let html = "";
+
+    q.options.forEach((opt, index) => {
+        html += `<div class="option" onclick="selectAnswer(${index}, this)">${opt}</div>`;
+    });
+
+    document.getElementById("options").innerHTML = html;
+
+    startTimer();
+}
+
+function startTimer() {
+    document.getElementById("timer").innerText = "Time: " + timeLeft;
+
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById("timer").innerText = "Time: " + timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            revealAnswer();
+        }
+    }, 1000);
+}
+
+function selectAnswer(index, el) {
+    if (answered) return;
+
+    answered = true;
+    clearInterval(timer);
+
+    let correct = quiz[current].answer;
+
+    if (index === correct) {
+        el.classList.add("correct");
+        score++;
+    } else {
+        el.classList.add("wrong");
+        document.querySelectorAll(".option")[correct].classList.add("correct");
+    }
+}
+
+function revealAnswer() {
+    answered = true;
+    let correct = quiz[current].answer;
+    document.querySelectorAll(".option")[correct].classList.add("correct");
+}
+
+function nextQuestion() {
+    current++;
+
+    if (current < quiz.length) {
+        loadQuestion();
+    } else {
+        document.querySelector(".quiz-container").innerHTML = `
+            <h2>Quiz Finished!</h2>
+            <p>Your Score: ${score}/${quiz.length}</p>
+            <button onclick="location.reload()">Restart</button>
+        `;
+    }
+}
+
+loadQuestion();
+</script>
 
 </body>
 </html>
