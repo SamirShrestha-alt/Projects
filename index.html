@@ -15,7 +15,7 @@
         margin: 0;
     }
 
-    .quiz-container {
+    .container {
         background: white;
         padding: 25px;
         border-radius: 15px;
@@ -24,32 +24,12 @@
         text-align: center;
     }
 
-    h2 {
-        margin-bottom: 10px;
-    }
-
-    .option {
-        display: block;
+    input {
+        padding: 10px;
+        width: 90%;
         margin: 10px 0;
-        padding: 12px;
-        background: #eee;
         border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .option:hover {
-        background: #ddd;
-    }
-
-    .correct {
-        background: #4CAF50 !important;
-        color: white;
-    }
-
-    .wrong {
-        background: #f44336 !important;
-        color: white;
+        border: 1px solid #ccc;
     }
 
     button {
@@ -68,12 +48,31 @@
         background: #5a67d8;
     }
 
-    #timer {
-        font-weight: bold;
-        margin-bottom: 10px;
+    .option {
+        display: block;
+        margin: 10px 0;
+        padding: 12px;
+        background: #eee;
+        border-radius: 8px;
+        cursor: pointer;
     }
 
-    #progress {
+    .option:hover {
+        background: #ddd;
+    }
+
+    .correct {
+        background: #4CAF50 !important;
+        color: white;
+    }
+
+    .wrong {
+        background: #f44336 !important;
+        color: white;
+    }
+
+    #timer, #progress {
+        font-weight: bold;
         margin-bottom: 10px;
     }
 </style>
@@ -81,15 +80,20 @@
 
 <body>
 
-<div class="quiz-container">
-    <div id="progress"></div>
-    <div id="timer">Time: 10</div>
-    <h2 id="question">Loading...</h2>
-    <div id="options"></div>
-    <button onclick="nextQuestion()">Next</button>
+<div class="container" id="app">
+
+    <!-- FRONT PAGE -->
+    <div id="startScreen">
+        <h1>🧠 Quiz Website</h1>
+        <p>Test your Computer Knowledge</p>
+        <input type="text" id="username" placeholder="Enter your name">
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
 </div>
 
 <script>
+
 const quiz = [
     { question: "What does CPU stand for?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Control Processing Unit"], answer: 0 },
     { question: "Which device is used to input data?", options: ["Monitor", "Keyboard", "Printer", "Speaker"], answer: 1 },
@@ -118,7 +122,24 @@ let score = 0;
 let timeLeft = 10;
 let timer;
 let answered = false;
+let userName = "";
 
+// START QUIZ
+function startQuiz() {
+    userName = document.getElementById("username").value || "Player";
+
+    document.getElementById("app").innerHTML = `
+        <div id="progress"></div>
+        <div id="timer">Time: 10</div>
+        <h2 id="question"></h2>
+        <div id="options"></div>
+        <button onclick="nextQuestion()">Next</button>
+    `;
+
+    loadQuestion();
+}
+
+// LOAD QUESTION
 function loadQuestion() {
     clearInterval(timer);
     answered = false;
@@ -141,6 +162,7 @@ function loadQuestion() {
     startTimer();
 }
 
+// TIMER
 function startTimer() {
     document.getElementById("timer").innerText = "Time: " + timeLeft;
 
@@ -155,6 +177,7 @@ function startTimer() {
     }, 1000);
 }
 
+// SELECT ANSWER
 function selectAnswer(index, el) {
     if (answered) return;
 
@@ -172,27 +195,28 @@ function selectAnswer(index, el) {
     }
 }
 
+// SHOW CORRECT
 function revealAnswer() {
     answered = true;
     let correct = quiz[current].answer;
     document.querySelectorAll(".option")[correct].classList.add("correct");
 }
 
+// NEXT
 function nextQuestion() {
     current++;
 
     if (current < quiz.length) {
         loadQuestion();
     } else {
-        document.querySelector(".quiz-container").innerHTML = `
-            <h2>Quiz Finished!</h2>
-            <p>Your Score: ${score}/${quiz.length}</p>
+        document.getElementById("app").innerHTML = `
+            <h2>🎉 Quiz Finished!</h2>
+            <p>${userName}, your score: ${score}/${quiz.length}</p>
             <button onclick="location.reload()">Restart</button>
         `;
     }
 }
 
-loadQuestion();
 </script>
 
 </body>
