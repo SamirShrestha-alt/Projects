@@ -5,76 +5,138 @@
 <title>Class 11 Quiz App</title>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-    }
+/* Animated Background */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(-45deg, #667eea, #764ba2, #6b46c1, #5a67d8);
+    background-size: 400% 400%;
+    animation: gradientBG 8s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
 
-    .container {
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        width: 420px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        text-align: center;
-    }
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-    input {
-        padding: 10px;
-        width: 90%;
-        margin: 10px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
+/* Main Container */
+.container {
+    padding: 25px;
+    border-radius: 20px;
+    width: 420px;
+    text-align: center;
+}
 
-    button {
-        margin-top: 15px;
-        padding: 12px;
-        width: 100%;
-        border: none;
-        background: #667eea;
-        color: white;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-    }
+/* Glass Start Card */
+.start-card {
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: fadeIn 1s ease;
+}
 
-    button:hover {
-        background: #5a67d8;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-    .option {
-        display: block;
-        margin: 10px 0;
-        padding: 12px;
-        background: #eee;
-        border-radius: 8px;
-        cursor: pointer;
-    }
+/* Title */
+.title {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+}
 
-    .option:hover {
-        background: #ddd;
-    }
+/* Subtitle */
+.subtitle {
+    color: #ddd;
+    margin-bottom: 20px;
+}
 
-    .correct {
-        background: #4CAF50 !important;
-        color: white;
-    }
+/* Input */
+input {
+    padding: 12px;
+    width: 90%;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    margin-bottom: 15px;
+}
 
-    .wrong {
-        background: #f44336 !important;
-        color: white;
-    }
+/* Button */
+button {
+    margin-top: 10px;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
-    #timer, #progress {
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
+/* Start Button */
+.start-btn {
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.start-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(0,114,255,0.7);
+}
+
+/* Quiz UI */
+.quiz-box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.option {
+    display: block;
+    margin: 10px 0;
+    padding: 12px;
+    background: #eee;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #ddd;
+}
+
+.correct {
+    background: #4CAF50 !important;
+    color: white;
+}
+
+.wrong {
+    background: #f44336 !important;
+    color: white;
+}
+
+#timer, #progress {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.info {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #eee;
+}
 </style>
 </head>
 
@@ -82,12 +144,16 @@
 
 <div class="container" id="app">
 
-    <!-- FRONT PAGE -->
-    <div id="startScreen">
-        <h1>🧠 Quiz Website</h1>
-        <p>Test your Computer Knowledge</p>
+    <!-- MODERN START UI -->
+    <div id="startScreen" class="start-card">
+        <h1 class="title">🧠 Quiz Master</h1>
+        <p class="subtitle">Challenge your Computer Knowledge</p>
+
         <input type="text" id="username" placeholder="Enter your name">
-        <button onclick="startQuiz()">Start Quiz</button>
+
+        <button class="start-btn" onclick="startQuiz()">Start Quiz 🚀</button>
+
+        <p class="info">⏱️ 10 sec • 🎯 20 Questions • 📊 Instant Score</p>
     </div>
 
 </div>
@@ -129,11 +195,13 @@ function startQuiz() {
     userName = document.getElementById("username").value || "Player";
 
     document.getElementById("app").innerHTML = `
-        <div id="progress"></div>
-        <div id="timer">Time: 10</div>
-        <h2 id="question"></h2>
-        <div id="options"></div>
-        <button onclick="nextQuestion()">Next</button>
+        <div class="quiz-box">
+            <div id="progress"></div>
+            <div id="timer">Time: 10</div>
+            <h2 id="question"></h2>
+            <div id="options"></div>
+            <button onclick="nextQuestion()">Next</button>
+        </div>
     `;
 
     loadQuestion();
@@ -210,9 +278,11 @@ function nextQuestion() {
         loadQuestion();
     } else {
         document.getElementById("app").innerHTML = `
-            <h2>🎉 Quiz Finished!</h2>
-            <p>${userName}, your score: ${score}/${quiz.length}</p>
-            <button onclick="location.reload()">Restart</button>
+            <div class="quiz-box">
+                <h2>🎉 Quiz Finished!</h2>
+                <p>${userName}, your score: ${score}/${quiz.length}</p>
+                <button onclick="location.reload()">Restart</button>
+            </div>
         `;
     }
 }
