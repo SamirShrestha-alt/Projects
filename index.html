@@ -2,57 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Class 11 Quiz App</title>
+<title>Cool Quiz App</title>
 
 <style>
+
 /* Animated Background */
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(-45deg, #667eea, #764ba2, #6b46c1, #5a67d8);
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg, #1e3c72, #2a5298, #6a11cb, #2575fc);
     background-size: 400% 400%;
-    animation: gradientBG 8s ease infinite;
+    animation: bgMove 10s ease infinite;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
 }
 
-@keyframes gradientBG {
+@keyframes bgMove {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* Main Container */
+/* Card */
 .container {
-    padding: 25px;
-    border-radius: 20px;
     width: 420px;
     text-align: center;
 }
 
-/* Glass Start Card */
-.start-card {
-    backdrop-filter: blur(12px);
-    background: rgba(255,255,255,0.15);
-    border-radius: 20px;
+/* Glass Effect */
+.start {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.1);
     padding: 30px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.3);
     animation: fadeIn 1s ease;
 }
 
+/* Animation */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {opacity:0; transform:translateY(20px);}
+    to {opacity:1; transform:translateY(0);}
 }
 
 /* Title */
 .title {
     font-size: 32px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 10px;
+    color: #fff;
+    text-shadow: 0 0 10px #00f2fe;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
 }
 
 /* Subtitle */
@@ -63,80 +68,55 @@ body {
 
 /* Input */
 input {
-    padding: 12px;
     width: 90%;
+    padding: 12px;
     border-radius: 10px;
     border: none;
     outline: none;
     margin-bottom: 15px;
 }
 
-/* Button */
+/* Neon Button */
 button {
-    margin-top: 10px;
-    padding: 12px;
     width: 100%;
+    padding: 12px;
     border: none;
-    color: white;
-    font-size: 16px;
     border-radius: 10px;
-    cursor: pointer;
-}
-
-/* Start Button */
-.start-btn {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-    font-size: 18px;
+    background: #00f2fe;
+    color: black;
     font-weight: bold;
+    cursor: pointer;
     transition: 0.3s;
 }
 
-.start-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px rgba(0,114,255,0.7);
+button:hover {
+    background: #4facfe;
+    box-shadow: 0 0 15px #00f2fe;
+    transform: scale(1.05);
 }
 
-/* Quiz UI */
+/* Quiz */
 .quiz-box {
     background: white;
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 .option {
-    display: block;
-    margin: 10px 0;
-    padding: 12px;
     background: #eee;
+    padding: 10px;
+    margin: 8px 0;
     border-radius: 8px;
     cursor: pointer;
 }
 
-.option:hover {
-    background: #ddd;
-}
+.option:hover { background: #ddd; }
 
-.correct {
-    background: #4CAF50 !important;
-    color: white;
-}
+.correct { background: green !important; color:white; }
+.wrong { background: red !important; color:white; }
 
-.wrong {
-    background: #f44336 !important;
-    color: white;
-}
+#timer { font-weight: bold; }
 
-#timer, #progress {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.info {
-    margin-top: 15px;
-    font-size: 13px;
-    color: #eee;
-}
 </style>
 </head>
 
@@ -144,144 +124,110 @@ button {
 
 <div class="container" id="app">
 
-    <!-- MODERN START UI -->
-    <div id="startScreen" class="start-card">
-        <h1 class="title">🧠 Quiz Master</h1>
-        <p class="subtitle">Challenge your Computer Knowledge</p>
-
-        <input type="text" id="username" placeholder="Enter your name">
-
-        <button class="start-btn" onclick="startQuiz()">Start Quiz 🚀</button>
-
-        <p class="info">⏱️ 10 sec • 🎯 20 Questions • 📊 Instant Score</p>
-    </div>
+<!-- COOL START UI -->
+<div class="start">
+    <h1 class="title">⚡ Quiz Master</h1>
+    <p class="subtitle">Are you ready to test your brain?</p>
+    <input type="text" id="name" placeholder="Enter your name">
+    <button onclick="startQuiz()">Start Game 🚀</button>
+</div>
 
 </div>
 
 <script>
 
 const quiz = [
-    { question: "What does CPU stand for?", options: ["Central Processing Unit", "Computer Personal Unit", "Central Program Utility", "Control Processing Unit"], answer: 0 },
-    { question: "Which device is used to input data?", options: ["Monitor", "Keyboard", "Printer", "Speaker"], answer: 1 },
-    { question: "What does RAM stand for?", options: ["Random Access Memory", "Read Access Memory", "Run Access Memory", "Real Application Memory"], answer: 0 },
-    { question: "Which is an output device?", options: ["Mouse", "Keyboard", "Monitor", "Scanner"], answer: 2 },
-    { question: "What is the brain of the computer?", options: ["RAM", "CPU", "Hard Disk", "Motherboard"], answer: 1 },
-    { question: "Which language is used to create web pages?", options: ["HTML", "C++", "Python", "Java"], answer: 0 },
-    { question: "What does ALU stand for?", options: ["Arithmetic Logic Unit", "Application Logic Unit", "Advanced Logic Unit", "Arithmetic Link Unit"], answer: 0 },
-    { question: "Which storage is permanent?", options: ["RAM", "Cache", "ROM", "Register"], answer: 2 },
-    { question: "Which is an example of operating system?", options: ["Windows", "MS Word", "Excel", "PowerPoint"], answer: 0 },
-    { question: "What is the full form of URL?", options: ["Uniform Resource Locator", "Universal Resource Link", "Uniform Reference Link", "Universal Reference Locator"], answer: 0 },
-    { question: "Which device is used to print documents?", options: ["Monitor", "Printer", "Speaker", "Mouse"], answer: 1 },
-    { question: "What is the smallest unit of data?", options: ["Byte", "Bit", "KB", "MB"], answer: 1 },
-    { question: "Which memory is fastest?", options: ["RAM", "ROM", "Cache", "Hard Disk"], answer: 2 },
-    { question: "What does GUI stand for?", options: ["Graphical User Interface", "General User Interface", "Graphical Utility Interface", "General Utility Interface"], answer: 0 },
-    { question: "Which is a programming language?", options: ["HTML", "CSS", "Python", "HTTP"], answer: 2 },
-    { question: "What is the full form of USB?", options: ["Universal Serial Bus", "United System Bus", "Universal System Bus", "Unique Serial Bus"], answer: 0 },
-    { question: "Which part stores data permanently?", options: ["RAM", "Hard Disk", "Cache", "Register"], answer: 1 },
-    { question: "Which device is used to move cursor?", options: ["Keyboard", "Monitor", "Mouse", "Printer"], answer: 2 },
-    { question: "What does LAN stand for?", options: ["Local Area Network", "Large Area Network", "Logical Area Network", "Long Area Network"], answer: 0 },
-    { question: "Which is an input device?", options: ["Scanner", "Printer", "Monitor", "Speaker"], answer: 0 }
+{q:"CPU stands for?",o:["Central Processing Unit","Control Unit","Computer Unit","Core Unit"],a:0},
+{q:"Input device?",o:["Monitor","Keyboard","Speaker","Printer"],a:1},
+{q:"RAM is?",o:["Permanent","Temporary","External","Optical"],a:1},
+{q:"Output device?",o:["Mouse","Keyboard","Monitor","Scanner"],a:2},
+{q:"Brain of computer?",o:["RAM","CPU","Hard Disk","ROM"],a:1},
+{q:"HTML is used for?",o:["Programming","Web pages","Games","Database"],a:1},
+{q:"ALU stands for?",o:["Arithmetic Logic Unit","Array Logic Unit","Advanced Logic Unit","None"],a:0},
+{q:"Permanent memory?",o:["RAM","Cache","ROM","Register"],a:2},
+{q:"OS example?",o:["Word","Windows","Excel","Paint"],a:1},
+{q:"URL means?",o:["Uniform Resource Locator","Universal Link","Unique Link","None"],a:0},
+{q:"Print device?",o:["Monitor","Printer","Speaker","Mouse"],a:1},
+{q:"Smallest unit?",o:["Byte","Bit","KB","MB"],a:1},
+{q:"Fastest memory?",o:["RAM","ROM","Cache","Disk"],a:2},
+{q:"GUI means?",o:["Graphical User Interface","General UI","Game UI","None"],a:0},
+{q:"Programming language?",o:["HTML","CSS","Python","HTTP"],a:2},
+{q:"USB full form?",o:["Universal Serial Bus","United Bus","Unique Bus","None"],a:0},
+{q:"Stores data permanently?",o:["RAM","Disk","Cache","Register"],a:1},
+{q:"Cursor device?",o:["Keyboard","Mouse","Monitor","Printer"],a:1},
+{q:"LAN stands for?",o:["Local Area Network","Large Area Network","Long Network","None"],a:0},
+{q:"Input device?",o:["Scanner","Printer","Monitor","Speaker"],a:0}
 ];
 
-let current = 0;
-let score = 0;
-let timeLeft = 10;
-let timer;
-let answered = false;
-let userName = "";
+let i=0, score=0, timer, time=10, user="";
 
-// START QUIZ
-function startQuiz() {
-    userName = document.getElementById("username").value || "Player";
-
-    document.getElementById("app").innerHTML = `
+function startQuiz(){
+    user=document.getElementById("name").value||"Player";
+    document.getElementById("app").innerHTML=`
         <div class="quiz-box">
-            <div id="progress"></div>
-            <div id="timer">Time: 10</div>
-            <h2 id="question"></h2>
-            <div id="options"></div>
-            <button onclick="nextQuestion()">Next</button>
+        <div id="timer"></div>
+        <h2 id="q"></h2>
+        <div id="opt"></div>
+        <button onclick="next()">Next</button>
         </div>
     `;
-
-    loadQuestion();
+    load();
 }
 
-// LOAD QUESTION
-function loadQuestion() {
+function load(){
     clearInterval(timer);
-    answered = false;
-    timeLeft = 10;
+    time=10;
+    let q=quiz[i];
+    document.getElementById("q").innerText=q.q;
 
-    let q = quiz[current];
-
-    document.getElementById("question").innerText = q.question;
-    document.getElementById("progress").innerText =
-        `Question ${current + 1} of ${quiz.length}`;
-
-    let html = "";
-
-    q.options.forEach((opt, index) => {
-        html += `<div class="option" onclick="selectAnswer(${index}, this)">${opt}</div>`;
+    let html="";
+    q.o.forEach((x,idx)=>{
+        html+=`<div class="option" onclick="ans(${idx},this)">${x}</div>`;
     });
 
-    document.getElementById("options").innerHTML = html;
-
+    document.getElementById("opt").innerHTML=html;
     startTimer();
 }
 
-// TIMER
-function startTimer() {
-    document.getElementById("timer").innerText = "Time: " + timeLeft;
-
-    timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById("timer").innerText = "Time: " + timeLeft;
-
-        if (timeLeft <= 0) {
+function startTimer(){
+    document.getElementById("timer").innerText="Time: "+time;
+    timer=setInterval(()=>{
+        time--;
+        document.getElementById("timer").innerText="Time: "+time;
+        if(time==0){
             clearInterval(timer);
-            revealAnswer();
+            showAns();
         }
-    }, 1000);
+    },1000);
 }
 
-// SELECT ANSWER
-function selectAnswer(index, el) {
-    if (answered) return;
-
-    answered = true;
+function ans(idx,el){
     clearInterval(timer);
-
-    let correct = quiz[current].answer;
-
-    if (index === correct) {
+    let c=quiz[i].a;
+    if(idx==c){
         el.classList.add("correct");
         score++;
-    } else {
+    }else{
         el.classList.add("wrong");
-        document.querySelectorAll(".option")[correct].classList.add("correct");
+        document.querySelectorAll(".option")[c].classList.add("correct");
     }
 }
 
-// SHOW CORRECT
-function revealAnswer() {
-    answered = true;
-    let correct = quiz[current].answer;
-    document.querySelectorAll(".option")[correct].classList.add("correct");
+function showAns(){
+    let c=quiz[i].a;
+    document.querySelectorAll(".option")[c].classList.add("correct");
 }
 
-// NEXT
-function nextQuestion() {
-    current++;
-
-    if (current < quiz.length) {
-        loadQuestion();
-    } else {
-        document.getElementById("app").innerHTML = `
+function next(){
+    i++;
+    if(i<quiz.length){
+        load();
+    }else{
+        document.getElementById("app").innerHTML=`
             <div class="quiz-box">
-                <h2>🎉 Quiz Finished!</h2>
-                <p>${userName}, your score: ${score}/${quiz.length}</p>
-                <button onclick="location.reload()">Restart</button>
+            <h2>🎉 Finished</h2>
+            <p>${user}, Score: ${score}/${quiz.length}</p>
+            <button onclick="location.reload()">Restart</button>
             </div>
         `;
     }
